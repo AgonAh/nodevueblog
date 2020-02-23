@@ -70,7 +70,11 @@ router.get('/user/:username',(req,res)=>{
     });
 });
 
-
+// router.delete('/AUser/:id',(req,res)=>{
+//     Users.remove({_id : req.params.id}).then(result => {
+//         res.status(200).json(result);
+//     });
+// });
 
 router.delete('/user',(req,res)=>{
     Users.remove({_id : req.session.user._id}).then(result => {
@@ -87,10 +91,10 @@ router.delete('/post/:id',(req,res)=>{
     });
 })
 
-router.put('/:id',(req,res)=>{
-    Users.updateOne({_id : req.params.id},req.body).exec().then(result => {
-        res.status(200).json(result);
-    })
+router.put('/updateUser',(req,res)=>{
+    Users.updateOne({_id : req.session.user._id},req.body).exec()
+    .then(result => res.status(200).json(result))
+    .catch(err=>res.status(500).json({err}))
 });
 
 router.post('/addPost',(req,res)=>{

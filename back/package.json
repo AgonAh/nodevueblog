@@ -4,7 +4,8 @@
   "description": "Faqe blog me node-express api dhe front me Vue per bazat e web design",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "Agon Ahmetaj",
   "license": "ISC",

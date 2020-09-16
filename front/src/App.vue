@@ -1,8 +1,14 @@
 <template>
   <div id="app">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <div class="bg-danger">{{msg}}</div>
-    <Header  v-bind:user="user" v-on:logout="logout" v-bind:componentKey="componentKey" :key="componentKey" @inc="keyIncrement" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <div class="bg-danger">{{ msg }}</div>
+    <Header
+      v-bind:user="user"
+      v-on:logout="logout"
+      v-bind:componentKey="componentKey"
+      :key="componentKey"
+      @inc="keyIncrement"
+    />
     <div class="container">
       <router-view @login="login" @logout="logout" @setMsg="setMsg" v-bind:loggeduser="user" />
     </div>
@@ -10,61 +16,76 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Header from './components/Header'
+import axios from "axios";
+import Header from "./components/Header";
+const BACK_URL = process.env.VUE_APP_BACK_URL;
 export default {
-  name:"App",
-  components:{
-    Header
+  name: "App",
+  components: {
+    Header,
   },
-  data(){
+  data() {
     return {
-      user : [],
+      user: [],
       componentKey: 0,
-      msg:''
-    }
+      msg: "",
+    };
   },
-  methods:{
-    getLoggedUser : function(){
-      axios.get('http://localhost:5000/userinfo',{withCredentials:true})
-      .then(res=>{this.user = res.data; console.log(this.users)})
-      .catch(err=>console.log(err));
+  methods: {
+    getLoggedUser: function () {
+      axios
+        .get(BACK_URL + "/userinfo", { withCredentials: true })
+        .then((res) => {
+          this.user = res.data;
+          console.log(this.users);
+        })
+        .catch((err) => console.log(err));
     },
-    login(user){
-      axios.post('http://localhost:5000/login',user,{withCredentials : true})
-      .then(res=>{this.user = res.data; console.log(this.users); this.$router.push('/')})
-      .catch(err=>{console.log(err); this.setMsg("Couldn't log in")});
+    login(user) {
+      axios
+        .post(BACK_URL + "/login", user, { withCredentials: true })
+        .then((res) => {
+          this.user = res.data;
+          console.log(this.users);
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          console.log(err);
+          this.setMsg("Couldn't log in");
+        });
     },
-    logout(){
-      axios.get('http://localhost:5000/logout',{ withCredentials: true}).then(res=>{
-        this.$router.push('/');
+    logout() {
+      axios.get(BACK_URL + "/logout", { withCredentials: true }).then((res) => {
+        this.$router.push("/");
       });
       this.user = [];
       this.componentKey++;
       console.log(this.componentKey);
     },
-    setMsg(message){
-      this.msg=message;
-      setTimeout(()=>{ this.msg="" }, 4000);
+    setMsg(message) {
+      this.msg = message;
+      setTimeout(() => {
+        this.msg = "";
+      }, 4000);
     },
-    keyIncrement(){
+    keyIncrement() {
       this.componentKey++;
-    }
+    },
   },
-  
-  created(){
+
+  created() {
     this.getLoggedUser();
-  }
-}
+  },
+};
 </script>
 
 <style>
-body{
+body {
   /* background: #001935; */
-  background: url('/bgr.jpg') no-repeat fixed;
+  background: url("/bgr.jpg") no-repeat fixed;
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
